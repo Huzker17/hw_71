@@ -1,0 +1,14 @@
+﻿@model User
+<div class="container d-flex justify-content-center align-items-center">
+    <div class="card">
+        <div class="upper"> <img src="https://i.imgur.com/Qtrsrk5.jpg" class="img-fluid"> </div>
+        <div class="user text-center">
+            <div class="profile"> <img src="@Model.Photo" class="rounded-circle" width="80"> </div>
+        </div>
+        <div class="mt-5 text-center">
+            <h4 class="mb-0">@Model.UserName</h4> <span class="text-muted d-block mb-2">@Model.Email</span><span class="text-muted d-block mb-2">@Model.PhoneNumber</span>
+            <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@Model.Id">Изменить</a>
+            <a class="btn btn-sm btn-primary" asp-action="ChangePassword" asp-route-id="@Model.Id">Сменить пароль</a>
+        </div>
+    </div>
+</div>

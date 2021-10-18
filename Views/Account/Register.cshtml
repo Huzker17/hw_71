@@ -4,7 +4,7 @@
 
 <form method="post" asp-controller="Account" asp-action="Register" enctype="multipart/form-data">
     <div asp-validation-summary="ModelOnly"></div>
-    Компания: <input type="checkbox" id="myCheck" onclick="changeName()">   
+    Компания: <input type="checkbox" id="myCheck" onclick="changeName()" input asp-for="IsCompany">
     <div>
         <label asp-for="UserName" id="Name">Имя </label><br />
         <input asp-for="UserName" />
@@ -20,13 +20,18 @@
         <input type="file" name="uploadedFile" /><br>
     </div>
     <div>
+        <label asp-for="PhoneNumber"></label><br />
+        <input asp-for="PhoneNumber" />
+        <span asp-validation-for="PhoneNumber"></span>
+    </div>
+    <div>
         <label asp-for="Password"></label><br />
-        <input type="password" asp-for="Password"/>
+        <input type="password" asp-for="Password" />
         <span asp-validation-for="Password"></span>
     </div>
     <div>
         <label asp-for="PasswordConfirm"></label><br />
-        <input type="password" asp-for="PasswordConfirm"/>
+        <input type="password" asp-for="PasswordConfirm" />
         <span asp-validation-for="PasswordConfirm"></span>
     </div>
     <div>

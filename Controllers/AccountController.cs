@@ -34,7 +34,7 @@ namespace hh.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model, IFormFile uploadedFile)
         {
-            if (ModelState.IsValid && _db.ContextUser.Any(u => u.Email != model.Email && u.UserName != model.UserName))
+            if (ModelState.IsValid)
             {
                 User user = new User
                 {
@@ -61,7 +61,11 @@ namespace hh.Controllers
 
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(user, "user");
+
+                    if (model.IsCompany) 
+                    { await _userManager.AddToRoleAsync(user, "company"); }
+                    else { await _userManager.AddToRoleAsync(user, "user"); }
+                    await _signInManager.SignInAsync(user, false);
                     return RedirectToAction("Index", "Home");
                 }
             }
@@ -108,7 +112,6 @@ namespace hh.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
-            // удаляем аутентификационные куки
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
