@@ -28,5 +28,17 @@ namespace hh.Controllers
             var user = CurrentUser().Result;
             return View(user);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(User user)
+        {
+            var u = CurrentUser().Result;
+            u.UserName = user.UserName;
+            u.Email = user.Email;
+            u.PhoneNumber = user.PhoneNumber;
+            _db.ContextUser.Update(u);
+            await _db.SaveChangesAsync();
+            return RedirectToAction("Profile");
+        }
     }
 }
