@@ -32,8 +32,6 @@ namespace hh.Controllers
             return View();
         }
         [HttpPost]
-
-        [ResponseCache(CacheProfileName = "Caching")]
         public async Task<IActionResult> Register(RegisterViewModel model, IFormFile uploadedFile)
         {
             if (ModelState.IsValid && _db.ContextUser.Any(u => u.Email != model.Email && u.UserName != model.UserName))
@@ -64,10 +62,6 @@ namespace hh.Controllers
                 if (result.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(user, "user");
-                    if (!User.IsInRole("admin"))
-                    {
-                        await _signInManager.SignInAsync(user, false);
-                    }
                     return RedirectToAction("Index", "Home");
                 }
             }

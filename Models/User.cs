@@ -9,6 +9,5 @@ namespace hh.Models
     public class User : IdentityUser
     {
         public string Photo { get; set; }
-
     }
 }
