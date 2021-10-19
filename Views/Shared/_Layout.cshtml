@@ -29,6 +29,7 @@
                                 @if (User.Identity.IsAuthenticated)
                                 {
                                     <a asp-controller="User" asp-action="Profile">@User.Identity.Name</a>
+                                    <a asp-controller="Summary" asp-action="Create">Резюме</a>
 
                                     <form method="post" asp-controller="Account" asp-action="LogOut">
                                         <input type="submit" value="Выход" />
