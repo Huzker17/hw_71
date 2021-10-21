@@ -1,0 +1,27 @@
+﻿@model Vacancy
+<div class="container">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">@Model.Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@Model.Salary</td>
+            </tr>
+            <tr>
+                <td>Опыт работы от : @Model.From - @Model.To</td>
+            </tr>
+            <tr>
+                <td>@Model.Requirments</td>
+            </tr>
+            <tr>
+                <td>@Model.Category</td>
+            </tr>
+            <tr>
+                <td>@Model.UpdateTime</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using hh.Models;
@@ -10,9 +11,10 @@ using hh.Models;
 namespace hh.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211020101201_CreateSummaryandWork")]
+    partial class CreateSummaryandWork
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -208,7 +210,7 @@ namespace hh.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Summaries");
+                    b.ToTable("Summary");
                 });
 
             modelBuilder.Entity("hh.Models.User", b =>
@@ -278,47 +280,6 @@ namespace hh.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("hh.Models.Vacancy", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("Category")
-                        .HasColumnType("text");
-
-                    b.Property<int>("From")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Requirments")
-                        .HasColumnType("text");
-
-                    b.Property<int>("Salary")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("To")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("UpdateTime")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("Vision")
-                        .HasColumnType("boolean");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Vacancies");
-                });
-
             modelBuilder.Entity("hh.Models.WorkExp", b =>
                 {
                     b.Property<int>("Id")
@@ -348,7 +309,7 @@ namespace hh.Migrations
 
                     b.HasIndex("SummaryId");
 
-                    b.ToTable("Works");
+                    b.ToTable("WorkExp");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -418,13 +379,6 @@ namespace hh.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("hh.Models.Vacancy", b =>
-                {
-                    b.HasOne("hh.Models.User", null)
-                        .WithMany("Vacancies")
-                        .HasForeignKey("UserId");
-                });
-
             modelBuilder.Entity("hh.Models.WorkExp", b =>
                 {
                     b.HasOne("hh.Models.Summary", "Summary")
@@ -446,8 +400,6 @@ namespace hh.Migrations
             modelBuilder.Entity("hh.Models.User", b =>
                 {
                     b.Navigation("Summaries");
-
-                    b.Navigation("Vacancies");
                 });
 #pragma warning restore 612, 618
         }

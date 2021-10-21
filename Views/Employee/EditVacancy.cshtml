@@ -1,0 +1,34 @@
+﻿@model Vacancy
+<form method="post" asp-controller="Employee" asp-action="EditVacancy">
+    <div asp-validation-summary="ModelOnly"></div>
+    <div>
+        <label asp-for="@Model.Name">Название </label><br />
+        <input asp-for="@Model.Name" />
+    </div>
+    <div>
+        <label asp-for="@Model.Salary">Зарплата</label><br />
+        <input asp-for="@Model.Salary" />
+    </div>
+    <div>
+        <label asp-for="@Model.Requirments">Требования</label><br />
+        <input asp-for="@Model.Requirments" />
+    </div>
+    <div>
+        <label asp-for="@Model.Category">Категория</label><br />
+
+        <select asp-for="@Model.Category" asp-items="ViewBag.Categories"></select>
+    </div>
+    <div>
+        Опыт работы
+        <label asp-for="@Model.From">От</label><br />
+        <input asp-for="@Model.From" />
+        <label asp-for="@Model.To">До</label><br />
+        <input asp-for="@Model.To" />
+    </div>
+    Доступ: <input type="checkbox" input asp-for="Vision">
+
+    <div>
+        <input type="submit" value="Сохранить" />
+    </div>
+
+</form>

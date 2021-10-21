@@ -1,0 +1,36 @@
+﻿@model Vacancy
+
+<h2>Создание вакансии</h2>
+
+<form method="post" asp-controller="Employee" asp-action="Create">
+    <div asp-validation-summary="ModelOnly"></div>
+    <div>
+        <label asp-for="@Model.Name">Название </label><br />
+        <input asp-for="@Model.Name" />
+    </div>
+    <div>
+        <label asp-for="@Model.Salary">Зарплата</label><br />
+        <input asp-for="@Model.Salary" />
+    </div>
+    <div>
+        <label asp-for="@Model.Requirments">Требования</label><br />
+        <input asp-for="@Model.Requirments" />
+    </div>
+    <div>
+        <label asp-for="@Model.Category">Категория</label><br />
+
+        <select asp-for="Category" asp-items="ViewBag.Categories"></select>
+    </div>
+    <div>
+        <label asp-for="@Model.From">Опыт работы От</label><br />
+        <input asp-for="@Model.From" />
+        <label asp-for="@Model.To">До</label><br />
+        <input asp-for="@Model.To" />
+    </div>
+    Общий доступ: <input type="checkbox"  input asp-for="Vision">
+
+    <div>
+        <input type="submit" value="Сохранить" />
+    </div>
+
+</form>

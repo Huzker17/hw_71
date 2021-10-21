@@ -41,15 +41,33 @@ namespace hh.Controllers
         public IActionResult Create(SummaryViewModel s)
         {
             var user = CurrentUser().Result;
-            if (s != null )
+            if(s.Work != null)
+            {
+                _db.Works.Add(s.Work);
+            }
+            if (s.Summary.Name != null )
             {
                 if (s.Summary != null)
                 {
+                    s.Summary.UpdateTime = DateTime.Now;
+                    s.Work.SummaryId = s.Summary.Id;
                     s.Summary.Works.Add(s.Work);
                     user.Summaries.Add(s.Summary);
                 }
             }
             return View();
+        }
+        [HttpPost]
+        //public  JsonResult Add(WorkExp work)
+        //{
+        //    var result = _db.Works.Add(work);
+        //    _db.SaveChangesAsync();
+        //    Console.WriteLine("work is saved");
+        //    return Json(new { work });
+        //}
+        public IActionResult Add()
+        {
+            return Ok();
         }
     }
 }

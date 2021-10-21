@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using hh.Models;
@@ -10,9 +11,10 @@ using hh.Models;
 namespace hh.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211021114742_CreateNewItemNamedVacancy")]
+    partial class CreateNewItemNamedVacancy
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -150,6 +152,26 @@ namespace hh.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("hh.Models.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("VacancyId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("VacancyId");
+
+                    b.ToTable("Category");
+                });
+
             modelBuilder.Entity("hh.Models.Graduation", b =>
                 {
                     b.Property<int>("Id")
@@ -285,9 +307,6 @@ namespace hh.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<string>("Category")
-                        .HasColumnType("text");
-
                     b.Property<int>("From")
                         .HasColumnType("integer");
 
@@ -308,9 +327,6 @@ namespace hh.Migrations
 
                     b.Property<string>("UserId")
                         .HasColumnType("text");
-
-                    b.Property<bool>("Vision")
-                        .HasColumnType("boolean");
 
                     b.HasKey("Id");
 
@@ -402,6 +418,13 @@ namespace hh.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("hh.Models.Category", b =>
+                {
+                    b.HasOne("hh.Models.Vacancy", null)
+                        .WithMany("Categories")
+                        .HasForeignKey("VacancyId");
+                });
+
             modelBuilder.Entity("hh.Models.Graduation", b =>
                 {
                     b.HasOne("hh.Models.Summary", null)
@@ -448,6 +471,11 @@ namespace hh.Migrations
                     b.Navigation("Summaries");
 
                     b.Navigation("Vacancies");
+                });
+
+            modelBuilder.Entity("hh.Models.Vacancy", b =>
+                {
+                    b.Navigation("Categories");
                 });
 #pragma warning restore 612, 618
         }
