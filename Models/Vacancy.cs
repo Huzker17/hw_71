@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,6 +17,13 @@ namespace hh.Models
         public DateTime UpdateTime { get; set; }
         public string Category { get; set; }
         public bool Vision { get; set; }
+        public string CompId { get; set; }
+        public User Comp { get; set; }
+        public ICollection<Feedback> Feedbacks { get; set; }
+        public Vacancy()
+        {
+            Feedbacks = new Collection<Feedback>();
+        }
 
     }
 }

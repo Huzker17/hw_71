@@ -2,7 +2,7 @@
 
 <h2>Создание вакансии</h2>
 
-<form method="post" asp-controller="Employee" asp-action="Create">
+<form method="post" asp-controller="Employee" asp-action="Create" onsubmit="return validateform()" >
     <div asp-validation-summary="ModelOnly"></div>
     <div>
         <label asp-for="@Model.Name">Название </label><br />
@@ -22,15 +22,26 @@
         <select asp-for="Category" asp-items="ViewBag.Categories"></select>
     </div>
     <div>
-        <label asp-for="@Model.From">Опыт работы От</label><br />
+        <label asp-for="@Model.From" id="from">Опыт работы От</label><br />
         <input asp-for="@Model.From" />
-        <label asp-for="@Model.To">До</label><br />
+        <label asp-for="@Model.To" id="to">До</label><br />
         <input asp-for="@Model.To" />
     </div>
-    Общий доступ: <input type="checkbox"  input asp-for="Vision">
+    Общий доступ: <input type="checkbox" input asp-for="Vision">
 
     <div>
         <input type="submit" value="Сохранить" />
     </div>
 
 </form>
+<script>
+function validateform(){
+    var from = $("#from");;
+var id=$("#to");
+
+if (from > id){
+  alert("Ввидете корректно");
+  return false;
+}
+    } 
+    </script>

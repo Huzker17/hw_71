@@ -33,31 +33,24 @@ namespace hh.Controllers
 
         public IActionResult Create()
         {
-            var sumvm = new SummaryViewModel();
-            return View(sumvm);
+            return View();
         }
 
         [HttpPost]
-        public IActionResult Create(SummaryViewModel s)
+        public IActionResult Create(Summary s)
         {
             var user = CurrentUser().Result;
-            if(s.Work != null)
+
+            if (s.Name != null )
             {
-                _db.Works.Add(s.Work);
-            }
-            if (s.Summary.Name != null )
-            {
-                if (s.Summary != null)
+                if (s != null)
                 {
-                    s.Summary.UpdateTime = DateTime.Now;
-                    s.Work.SummaryId = s.Summary.Id;
-                    s.Summary.Works.Add(s.Work);
-                    user.Summaries.Add(s.Summary);
+                    s.UpdateTime = DateTime.Now;
+                    user.Summaries.Add(s);
                 }
             }
             return View();
         }
-        [HttpPost]
         //public  JsonResult Add(WorkExp work)
         //{
         //    var result = _db.Works.Add(work);
@@ -65,8 +58,10 @@ namespace hh.Controllers
         //    Console.WriteLine("work is saved");
         //    return Json(new { work });
         //}
-        public IActionResult Add()
+        [HttpPost]
+        public IActionResult Add(string name, DateTime startDate, DateTime endDate, string spec, string text)
         {
+            var x = name;
             return Ok();
         }
     }

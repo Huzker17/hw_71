@@ -1,19 +1,79 @@
 ﻿@model List<Vacancy>
 <div class="container">
+    <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
+
+
     <div class="card-group">
         @if (Model != null)
         {
-        @foreach (var item in Model)
-        {
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">@item.Name</h5>
-                    <p class="card-text">@item.UpdateTime</p>
-                    <p class="card-text">@item.Salary</p>
-                    <p class="card-text"><small class="text-muted"></small></p>
-                </div>
+            <div id="myCards">
+                @foreach (var item in Model)
+                {
+                    <div class="card">
+                        <div class="card-body body">
+                            <h5 class="card-title name">@item.Name</h5>
+                            <p class="card-text">@item.UpdateTime</p>
+                            <p class="card-text">@item.Salary</p>
+                            <p class="card-text"><small class="text-muted"></small></p>
+                            <a asp-action="CompProfile" asp-controller="Employee" asp-route-Id="@item.CompId">@item.Comp.UserName</a>
+                            <a asp-action="FeedBack" asp-controller="Employee" asp-route-Id="@item.Id">Откликнуться</a>
+                        </div>
+                    </div>
+                }
             </div>
-        }
         }
     </div>
 </div>
+<ol id="pagin">
+</ol>
+<script>
+    function myFunction() {
+        var input, filter, cards, body, name, i, txtValue;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+        cards = document.getElementById("myCards");
+        body = cards.getElementsByClassName("body");
+        for (i = 0; i < body.length; i++) {
+    name = body[i].getElementsByClassName("name")[0];
+    if (name) {
+      txtValue = name.textContent || name.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          body[i].style.display = "";
+      } else {
+          body[i].style.display = "none";
+      }
+    }
+  }
+    }
+
+        pageSize = 20;
+    let arr = @Model.Count
+    showPage = function (page) {
+        $(".btn-link").hide();
+        $(".btn-link").each(function (n) {
+            if (n >= pageSize * (page - 1) && n < pageSize * page)
+                $(this).show();
+        });
+        }
+    $('document').ready(function () {
+        let x = 1;
+        for (let i = 20; i <= arr; i++) {
+            if (i == 20) {
+                $("#pagin").append("<li><a href='#' class='current'>1</a></li>");
+                if (i % 20 == 0) {
+                    x++;
+                    $("#pagin").append("<li><a href='#'>"+ x +"</a></li>");
+                }
+            }
+        }
+    });
+    setInterval(myCallback, 5000);
+    showPage(1);
+    function myCallback(){
+        $("#pagin li a").click(function () {
+            $("#pagin li a").removeClass("current");
+            $(this).addClass("current");
+            showPage(parseInt($(this).text()))
+        })
+    };
+</script>

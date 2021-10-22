@@ -13,6 +13,8 @@ namespace hh.Models
         public DbSet<Summary> Summaries { get; set; }
         public DbSet<WorkExp> Works { get; set; }
         public DbSet<Vacancy> Vacancies { get; set; }
+        public DbSet<Message> Messages { get; set; }
+        public DbSet<Feedback> Feedbacks { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

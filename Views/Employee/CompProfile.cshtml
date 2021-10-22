@@ -1,0 +1,33 @@
+﻿@model User
+<div class="container">
+    <table class="table">
+        <tbody>
+            <tr>
+                <td>Имя</td>
+                <td>@Model.UserName</td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td>@Model.Email</td>
+            </tr>
+            <tr>
+                <td>Номер телефона</td>
+                <td>@Model.PhoneNumber</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div>
+    @if (Model.Vacancies != null)
+    {
+        foreach (var item in Model.Vacancies)
+        {
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">@item.Name</h5>
+                    <h6 class="card-subtitle mb-2 text-muted" id="time">@item.UpdateTime</h6>
+                </div>
+            </div>
+        }
+    }
+</div>

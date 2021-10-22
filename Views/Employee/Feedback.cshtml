@@ -1,0 +1,65 @@
+﻿@model hh.ViewModels.MessageViewModel
+<div id="ext_comments" class="container_chat overflow-auto">
+    <input type="hidden" id="custId" name="custId" value="Model.Vac.CompId">
+
+    @foreach (var item in Model.Messages)
+    {
+        <div class="message-box overflow-auto">
+            @if (item.User != null)
+            {
+                <img src="@item.User.Photo" alt="Avatar" style="height: 100px;border-radius: 50%;">
+                <p id="text_comment_author">@item.User.UserName</p>
+            }
+            else
+            {
+                <img src="/Files/default.jfif" alt="Avatar" style="height: 100px;border-radius: 50%;">
+                <p id="text_comment_author">Anonim</p>
+
+            }
+            <p id="text_comment_text">@item.Text</p>
+            <span class="time-right" id="time">@item.SentTime</span>
+        </div>
+    }
+</div>
+
+@if (User.Identity.IsAuthenticated)
+{
+    <div id="solution_div_form">
+        <textarea id="comment_text" maxlength="150"></textarea>
+        <input type="button" id="comment_send" value="Send" class="btn" />
+        <p id="text_chars_left"></p>
+    </div>
+}
+@section scripts{ 
+    <script>
+
+            let htmlComment = '<div class="message-box overflow-auto" style = "padding-left:80%">' +
+            '<img src="" id="imga"alt="Avatar" style="height: 100px;border-radius: 50%;">' +
+            '<p id="ext_comment_author"></p>' +
+            '<p id="ext_comment_text"> </p>' +
+            '<span id="ext_time" class="time-right"></span>' +
+            '</div>'
+
+
+
+
+        $('#comment_send').on('click', () => {
+        $.post('@Url.Action("Add", "Chat")',
+            {
+                commentText: $('#comment_text').val(),
+                id: $('custId').val(),
+            },
+            function (response) {
+                let array = response;
+                console.log(array);
+                $('#ext_comments').append(htmlComment);
+                $('#imga').attr("src", array[0]);
+                $('#ext_comment_author').text(array[1]);
+                $('#ext_comment_text').text(array[2]);
+                $('#ext_time').text(array[3]);
+            }
+        )
+        })
+    </script>
+}
+

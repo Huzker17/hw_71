@@ -1,4 +1,5 @@
 ﻿using hh.Models;
+using hh.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -25,7 +26,7 @@ namespace hh.Controllers
         {
             if (CurrentUser().Result.Summaries != null)
             {
-                var vacs = _db.Vacancies.OrderByDescending(x => x.UpdateTime).Where(x => x.Vision != false).ToList();
+                var vacs = _db.Vacancies.Include(v => v.Comp).OrderByDescending(x => x.UpdateTime).Where(x => x.Vision != false).ToList();
                 return View(vacs);
             }
             else
@@ -37,6 +38,61 @@ namespace hh.Controllers
         private async Task<User> CurrentUser()
         {
             return await _userManager.GetUserAsync(HttpContext.User);
+        }
+        public IActionResult CompProfile(string Id)
+        {
+            var comp = _db.ContextUser.FirstOrDefault(c => c.Id == Id);
+            return View(comp);
+        }
+        public IActionResult FeedBack(int Id)
+        {
+            var fb = new Feedback();
+            fb.User = CurrentUser().Result;
+            fb.UserId = CurrentUser().Result.Id;
+            var Vacancy = _db.Vacancies.FirstOrDefault(x => x.Id == Id);
+            fb.Vacancy = Vacancy;
+            fb.VacancyId = Id;
+            _db.Feedbacks.Add(fb);
+            _db.SaveChanges();
+            var messages = _db.Messages.Include(x => x.User).Include(x => x.Comp).Where(x => x.User == CurrentUser().Result &&
+                                              x.Comp == Vacancy.Comp).ToList();
+            MessageViewModel mess = new MessageViewModel
+            {
+                Messages = messages,
+                Vac = Vacancy
+            };
+            return View(mess);
+        }
+        [HttpPost]
+
+        public async Task<JsonResult> Add(string commentText, string Id)
+        {
+            User user = CurrentUser().Result;
+            var comp = _db.ContextUser.FirstOrDefault(s => s.Id == Id);
+            Message message = new Message
+            {
+                User = user,
+                Comp = comp,
+                Text = commentText,
+                SentTime = DateTime.Now,
+            };
+            var result = _db.Messages.AddAsync(message);
+            if (result.IsCompleted)
+            {
+
+                await _db.SaveChangesAsync();
+            }
+            string Photo = user.Photo;
+            string UserName = user.UserName;
+            string SentTime = DateTime.Now.ToString();
+            string[] mes =
+            {
+                Photo,
+                UserName,
+                commentText,
+                SentTime
+            };
+            return Json(mes);
         }
 
         public IActionResult Profile()
@@ -114,6 +170,8 @@ namespace hh.Controllers
             {
                 var comp = CurrentUser().Result;
                 vacancy.UpdateTime = DateTime.Now;
+                vacancy.CompId = comp.Id;
+                vacancy.Comp = comp;
                 _db.Vacancies.Add(vacancy);
                 comp.Vacancies.Add(vacancy);
                 _db.ContextUser.Update(comp);

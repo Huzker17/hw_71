@@ -1,5 +1,83 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model Summary
+<h2>Создание резюме</h2>
+
+<form method="post" asp-controller="Summary" asp-action="Create">
+    <div asp-validation-summary="ModelOnly"></div>
+    <div>
+        <label asp-for="@Model.Name">Имя </label><br />
+        <input asp-for="@Model.Name" />
+    </div>
+    <div>
+        <label asp-for="@Model.Surname">Фамилия</label><br />
+        <input asp-for="@Model.Surname" />
+    </div>
+    <div>
+        <label asp-for="@Model.PhoneNumber">Номер</label><br />
+        <input asp-for="@Model.PhoneNumber" />
+    </div>
+    <div>
+        <label asp-for="@Model.City">Город</label><br />
+        <input asp-for="@Model.City" />
+    </div>
+    <div>
+        <label asp-for="@Model.Citizen">Гражданство</label><br />
+        <input asp-for="@Model.Citizen" />
+    </div>
+
+    <div id="works">
+        <div>
+            <label for="name">Имя компании</label><br />
+            <input type="text" id="name" />
+        </div>
+        <div>
+            <label for="start">Начало</label><br />
+            <input type="text" id="start"/>
+        </div>
+        <div>
+            <label for="end">Конец</label><br />
+            <input type="text" id="end" />
+        </div>
+        <div>
+            <label for="spec">Специальность</label><br />
+            <input type="text" id="spec" />
+        </div>
+        <div>
+            <label for="text">В чём заключалась работа</label><br />
+            <input type="text" id="text"/>
+        </div>
+        <div>
+            <input type="button" id="comment_send" value="Send" class="btn" />
+        </div>
+    </div>
+    <div>
+        <input type="submit" value="Сохранить" />
+    </div>
+</form>
+@section scripts{
+
+    <script>
+    let workHtml = '<div class="card" style="width: 18rem;">' +
+            '<div class="card-body"> '+
+                '<p class="card-text"></p>' +
+        '</div> </div >'
+
+
+
+                $('#comment_send').on('click', () => {
+        $.post('@Url.Action("Add", "Summary")',
+            {
+                name: $("#name"),
+                startDate: $("#start"),
+                endDate: $("#end"),
+                spec: $("#spec"),
+                text: $("#spec"),
+            },
+            function (response) {
+                alert(response)
+                console.log(response)
+                $("#works").append(workHtml);
+            }
+        )
+    })
+    </script>
+    }
