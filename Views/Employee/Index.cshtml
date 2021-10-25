@@ -1,4 +1,7 @@
 ﻿@model List<Vacancy>
+    <head>
+        <link rel="stylesheet" href="~/css/site.css" />
+    </head>
 <div class="container">
     <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
 
@@ -9,7 +12,7 @@
             <div id="myCards">
                 @foreach (var item in Model)
                 {
-                    <div class="card">
+                    <div class="card item">
                         <div class="card-body body">
                             <h5 class="card-title name">@item.Name</h5>
                             <p class="card-text">@item.UpdateTime</p>
@@ -23,9 +26,11 @@
             </div>
         }
     </div>
+    <div>
+    <ol id="pagin">
+    </ol>
+        </div>
 </div>
-<ol id="pagin">
-</ol>
 <script>
     function myFunction() {
         var input, filter, cards, body, name, i, txtValue;
@@ -48,9 +53,10 @@
 
         pageSize = 20;
     let arr = @Model.Count
+        console.log(arr);
     showPage = function (page) {
-        $(".btn-link").hide();
-        $(".btn-link").each(function (n) {
+        $(".item").hide();
+        $(".item").each(function (n) {
             if (n >= pageSize * (page - 1) && n < pageSize * page)
                 $(this).show();
         });

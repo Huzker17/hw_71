@@ -18,8 +18,10 @@ namespace hh.Models
         public string Citizen { get; set; }
         public bool HaveExperinece { get; set; }
         public ICollection<WorkExp> Works { get; set; }
-        public List<string> GraduationLvl { get; set; }
         public ICollection<Graduation> Graduations { get; set; }
+        public string Category { get; set; }
+        public ICollection<Category> Categories { get; set; }
+
 
         public string UserId { get; set; }
         public User User { get; set; }
@@ -28,6 +30,7 @@ namespace hh.Models
         {
             Works = new Collection<WorkExp>();
             Graduations = new Collection<Graduation>();
+            Categories = new Collection<Category>();
         }
 
     }

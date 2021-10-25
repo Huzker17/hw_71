@@ -24,6 +24,8 @@ namespace hh.Controllers
         }
         public IActionResult Index()
         {
+
+
             if (CurrentUser().Result.Summaries != null)
             {
                 var vacs = _db.Vacancies.Include(v => v.Comp).OrderByDescending(x => x.UpdateTime).Where(x => x.Vision != false).ToList();
@@ -103,15 +105,11 @@ namespace hh.Controllers
         }
         public IActionResult Create()
         {
-            ArrayList categories = new ArrayList
-            {
-                        "Информационные технологии" ,
-                        "Бизнес дело" ,
-                         "Финансы" ,
-                        "Банк" ,
-                        "Инженерия" 
-            };
-            ViewBag.Categories = new SelectList(categories);
+            var arr = _db.Categories.ToList();
+            List<string> mass = new List<string>();
+            for (int i = 0; i < arr.Count; i++)
+                mass.Add(arr[i].Name);
+            ViewBag.Categories = new SelectList(mass);
             return View();
         }
         [HttpPost]
@@ -127,15 +125,11 @@ namespace hh.Controllers
         }
         public IActionResult EditVacancy(int Id)
         {
-            ArrayList categories = new ArrayList
-            {
-                        "Информационные технологии" ,
-                        "Бизнес дело" ,
-                         "Финансы" ,
-                        "Банк" ,
-                        "Инженерия"
-            };
-            ViewBag.Categories = new SelectList(categories);
+            var arr = _db.Categories.ToList();
+            List<string> mass = new List<string>();
+            for (int i = 0; i < arr.Count; i++)
+                mass.Add(arr[i].Name);
+            ViewBag.Categories = new SelectList(mass);
             var vac = _db.Vacancies.FirstOrDefault(v => v.Id == Id);
             return View(vac);
         }

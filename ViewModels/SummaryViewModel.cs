@@ -9,6 +9,6 @@ namespace hh.ViewModels
     public class SummaryViewModel
     {
         public Summary Summary { get; set; }
-        public WorkExp Work { get; set; }
+        public List<WorkExp> ListOfWorks { get; set; }
     }
 }

@@ -37,31 +37,24 @@ namespace hh.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(Summary s)
+        public IActionResult Create(Summary Summary,IEnumerable<WorkExp> ListOfWorks)
         {
             var user = CurrentUser().Result;
 
-            if (s.Name != null )
+            if (ListOfWorks != null )
             {
-                if (s != null)
+                if (ListOfWorks != null)
                 {
-                    s.UpdateTime = DateTime.Now;
-                    user.Summaries.Add(s);
+                    //ListOfWorks.Summary.UpdateTime = DateTime.Now;
+                    //user.Summaries.Add(ListOfWorks.Summary);
                 }
             }
             return View();
         }
-        //public  JsonResult Add(WorkExp work)
-        //{
-        //    var result = _db.Works.Add(work);
-        //    _db.SaveChangesAsync();
-        //    Console.WriteLine("work is saved");
-        //    return Json(new { work });
-        //}
+
         [HttpPost]
-        public IActionResult Add(string name, DateTime startDate, DateTime endDate, string spec, string text)
+        public IActionResult Add(IEnumerable<Summary> s)
         {
-            var x = name;
             return Ok();
         }
     }

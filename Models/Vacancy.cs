@@ -20,9 +20,12 @@ namespace hh.Models
         public string CompId { get; set; }
         public User Comp { get; set; }
         public ICollection<Feedback> Feedbacks { get; set; }
+
+        public ICollection<Category> Categories { get; set; }
         public Vacancy()
         {
             Feedbacks = new Collection<Feedback>();
+            Categories = new Collection<Category>();
         }
 
     }

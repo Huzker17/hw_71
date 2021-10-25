@@ -1,83 +1,108 @@
 ﻿@model Summary
 <h2>Создание резюме</h2>
 
-<form method="post" asp-controller="Summary" asp-action="Create">
+<form >
     <div asp-validation-summary="ModelOnly"></div>
     <div>
-        <label asp-for="@Model.Name">Имя </label><br />
-        <input asp-for="@Model.Name" />
+        <label for="UserName">Имя </label><br />
+        <input id="UserName" />
     </div>
     <div>
-        <label asp-for="@Model.Surname">Фамилия</label><br />
-        <input asp-for="@Model.Surname" />
+        <label for="Surname">Фамилия</label><br />
+        <input id="Surname" />
     </div>
     <div>
-        <label asp-for="@Model.PhoneNumber">Номер</label><br />
-        <input asp-for="@Model.PhoneNumber" />
+        <label for="Number">Номер</label><br />
+        <input id="Number" />
     </div>
     <div>
-        <label asp-for="@Model.City">Город</label><br />
-        <input asp-for="@Model.City" />
+        <label for="City">Город</label><br />
+        <input id="City" />
     </div>
     <div>
-        <label asp-for="@Model.Citizen">Гражданство</label><br />
-        <input asp-for="@Model.Citizen" />
+        <label for="Citizen">Гражданство</label><br />
+        <input id="Citizen" />
     </div>
-
     <div id="works">
-        <div>
-            <label for="name">Имя компании</label><br />
-            <input type="text" id="name" />
-        </div>
-        <div>
-            <label for="start">Начало</label><br />
-            <input type="text" id="start"/>
-        </div>
-        <div>
-            <label for="end">Конец</label><br />
-            <input type="text" id="end" />
-        </div>
-        <div>
-            <label for="spec">Специальность</label><br />
-            <input type="text" id="spec" />
-        </div>
-        <div>
-            <label for="text">В чём заключалась работа</label><br />
-            <input type="text" id="text"/>
-        </div>
-        <div>
-            <input type="button" id="comment_send" value="Send" class="btn" />
-        </div>
     </div>
     <div>
-        <input type="submit" value="Сохранить" />
+        <a class="btn btn-sm btn-primary" data-toggle="modal" data-target="#myModal">Добавить</a>
+    </div>
+    <div>
+        <input type="submit" id="btnSaveData" value="Сохранить" />
     </div>
 </form>
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <label for="name">Имя компании</label><br />
+                    <input type="text" id="name" />
+                </div>
+                <div>
+                    <label for="spec">Специальность</label><br />
+                    <input type="text" id="spec" />
+                </div>
+                <div>
+                    <input type="button" id="btnAdd" value="Добавить" class="btn" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
 @section scripts{
 
     <script>
-    let workHtml = '<div class="card" style="width: 18rem;">' +
-            '<div class="card-body"> '+
-                '<p class="card-text"></p>' +
-        '</div> </div >'
 
+        $(document).ready(function () {
+            $("#btnAdd").click(function () {
+                AddWorkExp();
+            });
+            $("#btnSaveData").click(function () {
+                SaveData();
+            });
+        });
+        function AddWorkExp() {
+            var workHtml = '<div class="card" style="width: 18rem;"><span class ="card-body">' + $("#name").val() + '<p class="card-text">' + $("#spec").val() + '</p>' + '</span> </div>';
+            $("#works").last().append(workHtml);
+        }
+        function SaveData() {
+            var ListOfWorks = new Array();
+            var ListOfEdu = new Array();
+            var Summary = {};
+            Summary.Name = $("#UserName").val();
+            Summary.Surname = $("#Surname").val();
+            Summary.Number = $("#Number").val();
+            Summary.City = $("#City").val();
+            Summary.Citizen = $("#Citizen").val();
+            console.log(Summary);
+            $("#works").find("div").each(function () {
+                var Name = $(this).find("span").text();
+                var Spec = $(this).find("p").text();
+                var WorkExp = {};
+                WorkExp.Name = Name;
+                WorkExp.Spec = Spec;
+                ListOfWorks.push(WorkExp);
+            });
 
-
-                $('#comment_send').on('click', () => {
-        $.post('@Url.Action("Add", "Summary")',
-            {
-                name: $("#name"),
-                startDate: $("#start"),
-                endDate: $("#end"),
-                spec: $("#spec"),
-                text: $("#spec"),
-            },
-            function (response) {
-                alert(response)
-                console.log(response)
-                $("#works").append(workHtml);
-            }
-        )
-    })
+            $.post('@Url.Action("Create", "Summary")',
+                {
+                Summary: Summary,
+                ListOfWorks: ListOfWorks,
+                    },
+                    function (response) {
+                        console.log(response)
+                    
+            });
+        }
     </script>
-    }
+
+}

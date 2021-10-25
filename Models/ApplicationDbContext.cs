@@ -15,7 +15,7 @@ namespace hh.Models
         public DbSet<Vacancy> Vacancies { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
-
+        public DbSet<Category> Categories { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
