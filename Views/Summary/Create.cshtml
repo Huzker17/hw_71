@@ -1,7 +1,7 @@
 ﻿@model Summary
 <h2>Создание резюме</h2>
 
-<form >
+<form>
     <div asp-validation-summary="ModelOnly"></div>
     <div>
         <label for="UserName">Имя </label><br />
@@ -24,6 +24,10 @@
         <input id="Citizen" />
     </div>
     <div id="works">
+    </div>
+    <div id="educs">
+    </div>
+    <div id="certs">
     </div>
     <div>
         <a class="btn btn-sm btn-primary" data-toggle="modal" data-target="#myModal">Добавить</a>
@@ -48,7 +52,59 @@
                     <input type="text" id="spec" />
                 </div>
                 <div>
-                    <input type="button" id="btnAdd" value="Добавить" class="btn" />
+                    <input type="button" id="btnAddWork" value="Добавить" class="btn" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="modal fade" id="myModal2" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <label for="name2">Имя учебного заведения</label><br />
+                    <input type="text" id="name2" />
+                </div>
+                <div>
+                    <label for="spec2">Специальность</label><br />
+                    <input type="text" id="spec2" />
+                </div>
+                <div>
+                    <input type="button" id="btnAddEdu" value="Добавить" class="btn" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="modal fade" id="myModal3" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <label for="name3">Сертификат</label><br />
+                    <input type="text" id="name3" />
+                </div>
+                <div>
+                    <label for="spec3">Специальность</label><br />
+                    <input type="text" id="spec3" />
+                </div>
+                <div>
+                    <input type="button" id="btnAddCert" value="Добавить" class="btn" />
                 </div>
             </div>
             <div class="modal-footer">
@@ -63,20 +119,37 @@
     <script>
 
         $(document).ready(function () {
-            $("#btnAdd").click(function () {
+            $("#btnAddWork").click(function () {
                 AddWorkExp();
             });
-            $("#btnSaveData").click(function () {
-                SaveData();
+        $(document).ready(function () {
+            $("#btnAddEdu").click(function () {
+                AddEducation();
             });
+        $(document).ready(function () {
+            $("#btnAddCert").click(function () {
+                AddCertificate();
+            });
+        $("#btnSaveData").click(function () {
+            SaveData();
         });
+
         function AddWorkExp() {
             var workHtml = '<div class="card" style="width: 18rem;"><span class ="card-body">' + $("#name").val() + '<p class="card-text">' + $("#spec").val() + '</p>' + '</span> </div>';
             $("#works").last().append(workHtml);
+            }
+            function AddEducation() {
+            var eduHTml = '<div class="card" style="width: 18rem;"><span class ="card-body">' + $("#name2").val() + '<p class="card-text">' + $("#spec2").val() + '</p>' + '</span> </div>';
+            $("#educs").last().append(workHtml);
+        }
+            function AddCertificate() {
+            var workHtml = '<div class="card" style="width: 18rem;"><span class ="card-body">' + $("#name3").val() + '<p class="card-text">' + $("#spe3c").val() + '</p>' + '</span> </div>';
+            $("#certs").last().append(workHtml);
         }
         function SaveData() {
             var ListOfWorks = new Array();
             var ListOfEdu = new Array();
+            var ListOfCerts = new Array();
             var Summary = {};
             Summary.Name = $("#UserName").val();
             Summary.Surname = $("#Surname").val();
@@ -92,11 +165,29 @@
                 WorkExp.Spec = Spec;
                 ListOfWorks.push(WorkExp);
             });
+            $("#educs").find("div").each(function () {
+                var Name2 = $(this).find("span").text();
+                var Spec2 = $(this).find("p").text();
+                var Graduation = {};
+                Graduation.Name = Name2;
+                Graduation.Spec = Spec2;
+                ListOfEdu.push(WorkExp);
+            });
+            $("#certs").find("div").each(function () {
+                var Name3 = $(this).find("span").text();
+                var Spec3 = $(this).find("p").text();
+                var Certificate = {};
+                Certificate.Name = Name3;
+                Certificate.Spec = Spec3;
+                ListOfWorks.push(WorkExp);
+            });
 
             $.post('@Url.Action("Create", "Summary")',
                 {
                 Summary: Summary,
-                ListOfWorks: ListOfWorks,
+                    ListOfWorks: ListOfWorks,
+                    ListOfEdu: ListOfEdu,
+                    ListOfCerts: ListOfCerts,
                     },
                     function (response) {
                         console.log(response)

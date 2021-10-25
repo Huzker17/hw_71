@@ -37,7 +37,7 @@ namespace hh.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(Summary Summary,IEnumerable<WorkExp> ListOfWorks)
+        public IActionResult Create(Summary Summary,IEnumerable<WorkExp> ListOfWorks, IEnumerable<Graduation> ListOfEdu, IEnumerable<Certificate> ListOfCerts)
         {
             var user = CurrentUser().Result;
 
