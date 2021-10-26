@@ -11,16 +11,19 @@ namespace hh.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
-        public string PhoneNumber { get; set; }
         public string City { get; set; }
         public DateTime UpdateTime { get; set; }
-        public bool Gender { get; set; }
+        public int Salary { get; set; }
         public string Citizen { get; set; }
         public bool HaveExperinece { get; set; }
+        public string TgName { get; set; }
+        public string LinkedInUrl { get; set; }
+        public string FacebookUrl { get; set; }
         public ICollection<WorkExp> Works { get; set; }
         public ICollection<Graduation> Graduations { get; set; }
+        public ICollection<Certificate> Certificates { get; set; }
+
         public string Category { get; set; }
-        public ICollection<Category> Categories { get; set; }
 
 
         public string UserId { get; set; }
@@ -30,7 +33,7 @@ namespace hh.Models
         {
             Works = new Collection<WorkExp>();
             Graduations = new Collection<Graduation>();
-            Categories = new Collection<Category>();
+            Certificates = new Collection<Certificate>();
         }
 
     }

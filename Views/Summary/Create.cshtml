@@ -12,8 +12,12 @@
         <input id="Surname" />
     </div>
     <div>
-        <label for="Number">Номер</label><br />
-        <input id="Number" />
+        <label for="Category"></label><br/>
+        <select asp-for="Category" asp-items="ViewBag.Categories" id="Category"></select>
+    </div>
+    <div>
+        <label for="Salary">Ожидаемая зарплата</label><br />
+        <input id="Salary" />
     </div>
     <div>
         <label for="City">Город</label><br />
@@ -23,14 +27,35 @@
         <label for="Citizen">Гражданство</label><br />
         <input id="Citizen" />
     </div>
+    <div>
+        <label for="TgName">Укажите ваш телеграм</label><br />
+        <input id="TgName" />
+    </div>
+    <div>
+        <label for="LinkedInUrl">Укажите ссылку на ваш профиль в LinkedIn</label><br />
+        <input id="LinkedInUrl" />
+    </div>
+    <div>
+        <label for="FacebookUrl">Укажите ссылку на ваш профиль в Facebook</label><br/>
+        <input id="FacebookUrl" />
+    </div>
+        <h6>Опыт работы</h6>
     <div id="works">
     </div>
+        <div>
+            <a class="btn btn-sm btn-primary" data-toggle="modal" data-target="#myModal">Добавить место работы</a>
+        </div>
+        <h6>Места учёбы</h6>
     <div id="educs">
     </div>
+    <div>
+        <a class="btn btn-sm btn-primary" data-toggle="modal" data-target="#myModal2">Добавить место обучения</a>
+    </div>
+        <h6>Сертификаты</h6>
     <div id="certs">
     </div>
     <div>
-        <a class="btn btn-sm btn-primary" data-toggle="modal" data-target="#myModal">Добавить</a>
+        <a class="btn btn-sm btn-primary" data-toggle="modal" data-target="#myModal3">Добавить сертификаты</a>
     </div>
     <div>
         <input type="submit" id="btnSaveData" value="Сохранить" />
@@ -121,30 +146,34 @@
         $(document).ready(function () {
             $("#btnAddWork").click(function () {
                 AddWorkExp();
+        
+        });
             });
         $(document).ready(function () {
             $("#btnAddEdu").click(function () {
                 AddEducation();
             });
+            });
         $(document).ready(function () {
             $("#btnAddCert").click(function () {
                 AddCertificate();
+            });
             });
         $("#btnSaveData").click(function () {
             SaveData();
         });
 
         function AddWorkExp() {
-            var workHtml = '<div class="card" style="width: 18rem;"><span class ="card-body">' + $("#name").val() + '<p class="card-text">' + $("#spec").val() + '</p>' + '</span> </div>';
+            var workHtml = '<div class="card" style="width: 18rem;"><span class ="card-body">' + $("#name").val() + '<p class="card-text">' +$("#spec").val() + '</p>' + '</span> </div>';
             $("#works").last().append(workHtml);
             }
             function AddEducation() {
-            var eduHTml = '<div class="card" style="width: 18rem;"><span class ="card-body">' + $("#name2").val() + '<p class="card-text">' + $("#spec2").val() + '</p>' + '</span> </div>';
-            $("#educs").last().append(workHtml);
+            var eduHTml = '<div class="card" style="width: 18rem;"><span class ="card-body">'+ $("#name2").val() + '<p class="card-text">' +$("#spec2").val() + '</p>' + '</span> </div>';
+                $("#educs").last().append(eduHTml);
         }
             function AddCertificate() {
-            var workHtml = '<div class="card" style="width: 18rem;"><span class ="card-body">' + $("#name3").val() + '<p class="card-text">' + $("#spe3c").val() + '</p>' + '</span> </div>';
-            $("#certs").last().append(workHtml);
+            var certHtml = '<div class="card" style="width: 18rem;"><span class ="card-body">' + $("#name3").val() + '<p class="card-text">' + $("#spec3").val() + '</p>' + '</span> </div>';
+                $("#certs").last().append(certHtml);
         }
         function SaveData() {
             var ListOfWorks = new Array();
@@ -153,9 +182,13 @@
             var Summary = {};
             Summary.Name = $("#UserName").val();
             Summary.Surname = $("#Surname").val();
-            Summary.Number = $("#Number").val();
             Summary.City = $("#City").val();
             Summary.Citizen = $("#Citizen").val();
+            Summary.Salary = $("#Salary").val();
+            Summary.TgName = $("#TgName").val();
+            Summary.Category = $("#Category").val();
+            Summary.LinkedInUrl = $("#LinkedInUrl").val();
+            Summary.FacebookUrl = $("#FacebookUrl").val();
             console.log(Summary);
             $("#works").find("div").each(function () {
                 var Name = $(this).find("span").text();
@@ -171,7 +204,7 @@
                 var Graduation = {};
                 Graduation.Name = Name2;
                 Graduation.Spec = Spec2;
-                ListOfEdu.push(WorkExp);
+                ListOfEdu.push(Graduation);
             });
             $("#certs").find("div").each(function () {
                 var Name3 = $(this).find("span").text();
@@ -179,7 +212,7 @@
                 var Certificate = {};
                 Certificate.Name = Name3;
                 Certificate.Spec = Spec3;
-                ListOfWorks.push(WorkExp);
+                ListOfCerts.push(Certificate);
             });
 
             $.post('@Url.Action("Create", "Summary")',

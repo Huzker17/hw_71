@@ -21,6 +21,22 @@
         </tbody>
     </table>
 </div>
+<div>
+    @if (Model.Summaries != null)
+    {
+        foreach (var item in Model.Summaries)
+        {
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">@item.Name</h5>
+                    <h6 class="card-subtitle mb-2 text-muted" id="time">@item.UpdateTime</h6>
+                    <a class="card-link" asp-action="EditSummary" asp-controller="Summary" asp-route-Id="@item.Id">Edit</a>
+                    <a class="card-link" asp-action="Refresh" asp-controller="Summary" asp-route-Id="@item.Id">Refresh</a>
+                </div>
+            </div>
+        }
+    }
+</div>
 <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
 

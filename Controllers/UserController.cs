@@ -1,6 +1,7 @@
 ﻿using hh.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,8 @@ namespace hh.Controllers
         public IActionResult Profile()
         {
             var user = CurrentUser().Result;
+            var sums = _db.Summaries.Where(x => x.UserId == user.Id).ToList();
+            user.Summaries = sums;
             return View(user);
         }
 

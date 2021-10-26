@@ -1,4 +1,5 @@
-﻿using hh.Models;
+﻿using hh.Interfaces;
+using hh.Models;
 using hh.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -16,11 +17,14 @@ namespace hh.Controllers
     {
         private readonly UserManager<User> _userManager;
         private ApplicationDbContext _db;
+        private readonly ICommentService service;
 
-        public EmployeeController(UserManager<User> userManager, ApplicationDbContext db)
+        public EmployeeController(UserManager<User> userManager, ApplicationDbContext db, ICommentService service)
         {
             _userManager = userManager;
             _db = db;
+            this.service = service;
+
         }
         public IActionResult Index()
         {
@@ -35,6 +39,10 @@ namespace hh.Controllers
             {
                 return RedirectToAction("Create","Summary");
             }
+        }
+        public JsonResult AllComments(int curPage, int itemsPerPage)
+        {
+            return Json(new { CommentPageViewModel = service.GetCommentsForPage(curPage, itemsPerPage) });
         }
 
         private async Task<User> CurrentUser()

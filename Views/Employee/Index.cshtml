@@ -2,84 +2,85 @@
     <head>
         <link rel="stylesheet" href="~/css/site.css" />
     </head>
-<div class="container">
-    <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
+    <div class="container">
+        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
 
 
-    <div class="card-group">
-        @if (Model != null)
-        {
-            <div id="myCards">
-                @foreach (var item in Model)
-                {
-                    <div class="card item">
-                        <div class="card-body body">
-                            <h5 class="card-title name">@item.Name</h5>
-                            <p class="card-text">@item.UpdateTime</p>
-                            <p class="card-text">@item.Salary</p>
-                            <p class="card-text"><small class="text-muted"></small></p>
-                            <a asp-action="CompProfile" asp-controller="Employee" asp-route-Id="@item.CompId">@item.Comp.UserName</a>
-                            <a asp-action="FeedBack" asp-controller="Employee" asp-route-Id="@item.Id">Откликнуться</a>
+        <div id="ext_comments">
+            @if (Model != null)
+            {
+                <div id="myCards">
+                    @foreach (var item in Model)
+                    {
+                        <div class="card item">
+                            <div class="card-body body">
+                                <h5 class="card-title name">@item.Name</h5>
+                                <p class="card-text time">@item.UpdateTime</p>
+                                <p class="card-text salary">@item.Salary</p>
+                                <a asp-action="CompProfile" asp-controller="Employee" asp-route-Id="@item.CompId">@item.Comp.UserName</a>
+                                <a asp-action="FeedBack" asp-controller="Employee" asp-route-Id="@item.Id">Откликнуться</a>
+                            </div>
                         </div>
-                    </div>
-                }
-            </div>
-        }
-    </div>
-    <div>
-    <ol id="pagin">
-    </ol>
-        </div>
-</div>
-<script>
-    function myFunction() {
-        var input, filter, cards, body, name, i, txtValue;
-  input = document.getElementById("myInput");
-  filter = input.value.toUpperCase();
-        cards = document.getElementById("myCards");
-        body = cards.getElementsByClassName("body");
-        for (i = 0; i < body.length; i++) {
-    name = body[i].getElementsByClassName("name")[0];
-    if (name) {
-      txtValue = name.textContent || name.innerText;
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-          body[i].style.display = "";
-      } else {
-          body[i].style.display = "none";
-      }
-    }
-  }
-    }
-
-        pageSize = 20;
-    let arr = @Model.Count
-        console.log(arr);
-    showPage = function (page) {
-        $(".item").hide();
-        $(".item").each(function (n) {
-            if (n >= pageSize * (page - 1) && n < pageSize * page)
-                $(this).show();
-        });
-        }
-    $('document').ready(function () {
-        let x = 1;
-        for (let i = 20; i <= arr; i++) {
-            if (i == 20) {
-                $("#pagin").append("<li><a href='#' class='current'>1</a></li>");
-                if (i % 20 == 0) {
-                    x++;
-                    $("#pagin").append("<li><a href='#'>"+ x +"</a></li>");
-                }
+                    }
+                </div>
             }
+        </div>
+        <div class="paging"></div>
+
+    </div>
+<script>
+    let htmlComment = '<div class="card item" style="width:100%"> <div class="card-body body"> <h5 class="card-title name"> </h5><p class="card-text time"></p><p class="card-text salary"></p>' +
+        '<a asp-action="CompProfile asp-controller="Employee" asp-route-Id="item.CompId"></a><a asp-action="Feedback" asp-controller="Employee"' +
+        'asp-route-Id="item.Id">Откликнуться</a></div></div>';
+    let fillComments = function (comments) {
+        $('#ext_comments').empty()
+        for (let i = 0; i < comments.length; i++) {
+            let id = 'comment_' + (i + 1)
+            $('#ext_comments').last().append(htmlComment)
+            $('#ext_comments .card').last().attr('id', id)
+            $('#' + id + ' .name').text(comments[i].name)
+            $('#' + id + ' .time').text(comments[i].updateTime)
+            $('#' + id + ' .salary').text(comments[i].salary)
+
         }
-    });
-    setInterval(myCallback, 5000);
-    showPage(1);
-    function myCallback(){
-        $("#pagin li a").click(function () {
-            $("#pagin li a").removeClass("current");
-            $(this).addClass("current");
-            showPage(parseInt($(this).text()))
+    }
+        $(function(){
+        getComments(1)
+    })
+    let itemsPerPage = 20
+    let getComments = function (curPage) {
+        $.get('@Url.Action("AllComments", "Employee")', {
+            'curPage': curPage,
+            'itemsPerPage': itemsPerPage
+        }, function (response) {
+                console.log(response)
+                createPagingButtons(response.commentPageViewModel.maxPage)
+                $('.page_' + response.commentPageViewModel.curPage).attr('class', 'page-item active')
+                fillComments(response.commentPageViewModel.vacancies)
         })
-    };
+    }
+     let pagination = '<nav">'+
+        '<ul class="pagination" >'+
+         '   <li class="page-item disabled">'+
+          '      <span class="page-link" tabindex="-1" aria-disabled="true">Previous</span>'+
+           ' </li>'+
+            '<li class="next page-item">'+
+             '   <span class="page-link" >Next</span>'+
+            '</li>'+
+        '</ul >'+
+    '</nav >'
+    let createPagingButtons = function (maxPage) {
+        $('.paging').empty()
+        if (maxPage > 1) {
+        let button = ''
+        for (let i = 1; i <= maxPage; i++) {
+            button += '<li class="page_' + i +' page-item"><span class="page-link" onClick="switchPage('+i+')">'+i+'</span></li>'
+        }
+        $('.paging').append(pagination)
+            $('.next').before(button)
+        }
+    }
+    let switchPage = function (num) {
+        getComments(num)
+    }
 </script>

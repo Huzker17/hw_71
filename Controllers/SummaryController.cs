@@ -2,6 +2,7 @@
 using hh.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +34,11 @@ namespace hh.Controllers
 
         public IActionResult Create()
         {
+            var arr = _db.Categories.ToList();
+            List<string> mass = new List<string>();
+            for (int i = 0; i < arr.Count; i++)
+                mass.Add(arr[i].Name);
+            ViewBag.Categories = new SelectList(mass);
             return View();
         }
 
@@ -41,21 +47,29 @@ namespace hh.Controllers
         {
             var user = CurrentUser().Result;
 
-            if (ListOfWorks != null )
+            if (Summary != null )
             {
+                Summary.User = user;
+                Summary.UserId = user.Id;
+                Summary.UpdateTime = DateTime.Now;
                 if (ListOfWorks != null)
                 {
-                    //ListOfWorks.Summary.UpdateTime = DateTime.Now;
-                    //user.Summaries.Add(ListOfWorks.Summary);
+                    Summary.Works = ListOfWorks.ToList();
                 }
+                if(ListOfEdu != null)
+                {
+                    Summary.Graduations = ListOfEdu.ToList();
+                }
+                if(ListOfCerts != null)
+                {
+                    Summary.Certificates = ListOfCerts.ToList();
+                }
+                _db.Summaries.Add(Summary);
+                user.Summaries.Add(Summary);
+                _db.ContextUser.Update(user);
+                _db.SaveChanges();
             }
             return View();
-        }
-
-        [HttpPost]
-        public IActionResult Add(IEnumerable<Summary> s)
-        {
-            return Ok();
         }
     }
 }
