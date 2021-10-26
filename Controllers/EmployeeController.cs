@@ -28,16 +28,23 @@ namespace hh.Controllers
         }
         public IActionResult Index()
         {
-
-
-            if (CurrentUser().Result.Summaries != null)
+            if (CurrentUser().Result != null)
             {
-                var vacs = _db.Vacancies.Include(v => v.Comp).OrderByDescending(x => x.UpdateTime).Where(x => x.Vision != false).ToList();
-                return View(vacs);
+                var sums = _db.Summaries.Where(x => x.UserId == CurrentUser().Result.Id).ToList();
+                CurrentUser().Result.Summaries = sums;
+                if (CurrentUser().Result.Summaries.Count > 0)
+                {
+                    var vacs = _db.Vacancies.Include(v => v.Comp).OrderByDescending(x => x.UpdateTime).Where(x => x.Vision != false).ToList();
+                    return View(vacs);
+                }
+                else
+                {
+                    return RedirectToAction("Create", "Summary");
+                }
             }
             else
             {
-                return RedirectToAction("Create","Summary");
+                return RedirectToAction("Register", "Account");
             }
         }
         public JsonResult AllComments(int curPage, int itemsPerPage)
@@ -54,6 +61,7 @@ namespace hh.Controllers
             var comp = _db.ContextUser.FirstOrDefault(c => c.Id == Id);
             return View(comp);
         }
+        [HttpPost]
         public IActionResult FeedBack(int Id)
         {
             var fb = new Feedback();

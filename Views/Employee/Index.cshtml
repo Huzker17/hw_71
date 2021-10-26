@@ -10,28 +10,16 @@
             @if (Model != null)
             {
                 <div id="myCards">
-                    @foreach (var item in Model)
-                    {
-                        <div class="card item">
-                            <div class="card-body body">
-                                <h5 class="card-title name">@item.Name</h5>
-                                <p class="card-text time">@item.UpdateTime</p>
-                                <p class="card-text salary">@item.Salary</p>
-                                <a asp-action="CompProfile" asp-controller="Employee" asp-route-Id="@item.CompId">@item.Comp.UserName</a>
-                                <a asp-action="FeedBack" asp-controller="Employee" asp-route-Id="@item.Id">Откликнуться</a>
-                            </div>
-                        </div>
-                    }
+
                 </div>
             }
         </div>
         <div class="paging"></div>
 
     </div>
-<script>
+    <script>
     let htmlComment = '<div class="card item" style="width:100%"> <div class="card-body body"> <h5 class="card-title name"> </h5><p class="card-text time"></p><p class="card-text salary"></p>' +
-        '<a asp-action="CompProfile asp-controller="Employee" asp-route-Id="item.CompId"></a><a asp-action="Feedback" asp-controller="Employee"' +
-        'asp-route-Id="item.Id">Откликнуться</a></div></div>';
+        '<p class="bot"></p> </div></div>';
     let fillComments = function (comments) {
         $('#ext_comments').empty()
         for (let i = 0; i < comments.length; i++) {
@@ -41,9 +29,17 @@
             $('#' + id + ' .name').text(comments[i].name)
             $('#' + id + ' .time').text(comments[i].updateTime)
             $('#' + id + ' .salary').text(comments[i].salary)
-
+            $('#' + id + ' .bot').append('<button class="bot" onclick=MyFunction(' + comments[i].id + ')>Откликнуться</button>')
         }
-    }
+        }
+        let myFunction(id) {
+            $.post('@Url.Action("Feedback", "Employee")',
+                {
+                    Id: id,
+                },
+                function (response) {
+                });
+        }
         $(function(){
         getComments(1)
     })
@@ -57,6 +53,7 @@
                 createPagingButtons(response.commentPageViewModel.maxPage)
                 $('.page_' + response.commentPageViewModel.curPage).attr('class', 'page-item active')
                 fillComments(response.commentPageViewModel.vacancies)
+
         })
     }
      let pagination = '<nav">'+
@@ -83,4 +80,4 @@
     let switchPage = function (num) {
         getComments(num)
     }
-</script>
+    </script>

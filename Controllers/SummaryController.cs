@@ -54,15 +54,22 @@ namespace hh.Controllers
                 Summary.UpdateTime = DateTime.Now;
                 if (ListOfWorks != null)
                 {
+                    ListOfWorks.ToList().ForEach(x => x.SummaryId = Summary.Id);
                     Summary.Works = ListOfWorks.ToList();
+                    ListOfWorks.ToList().ForEach(x => _db.Works.Add(x));
                 }
                 if(ListOfEdu != null)
                 {
+                    ListOfEdu.ToList().ForEach(x => x.SummaryId = Summary.Id);
                     Summary.Graduations = ListOfEdu.ToList();
+                    ListOfEdu.ToList().ForEach(x => _db.Graduations.Add(x));
+
                 }
-                if(ListOfCerts != null)
+                if (ListOfCerts != null)
                 {
+                    ListOfCerts.ToList().ForEach(x => x.SummaryId = Summary.Id);
                     Summary.Certificates = ListOfCerts.ToList();
+                    ListOfCerts.ToList().ForEach(x => _db.Certificates.Add(x));
                 }
                 _db.Summaries.Add(Summary);
                 user.Summaries.Add(Summary);
@@ -70,6 +77,14 @@ namespace hh.Controllers
                 _db.SaveChanges();
             }
             return View();
+        }
+        public IActionResult Refresh( int Id)
+        {
+            var sum =_db.Summaries.FirstOrDefault(x => x.Id == Id);
+            sum.UpdateTime = DateTime.Now;
+            _db.Summaries.Update(sum);
+            _db.SaveChanges();
+            return RedirectToAction("Profile", "User");
         }
     }
 }

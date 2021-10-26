@@ -16,6 +16,9 @@ namespace hh.Models
         public DbSet<Message> Messages { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Graduation> Graduations { get; set; }
+        public DbSet<Certificate> Certificates { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
