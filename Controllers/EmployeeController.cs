@@ -142,6 +142,14 @@ namespace hh.Controllers
             await _db.SaveChangesAsync();
             return RedirectToAction("Profile");
         }
+        [HttpPost]
+        public async Task<IActionResult> Get(string Id)
+        {
+            EmailService emailService = new EmailService();
+            var user = _db.ContextUser.FirstOrDefault(x => x.Id == Id);
+            await emailService.SendEmailAsync($"{user.Email}", "Ваши данные были изменены", "Ваши данные" + $"{user.UserName}" + $"{ user.Email}" + $"{user.PhoneNumber}");
+            return RedirectToAction("Profile");
+        }
         public IActionResult EditVacancy(int Id)
         {
             var arr = _db.Categories.ToList();
