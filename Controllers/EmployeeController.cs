@@ -1,5 +1,6 @@
 ﻿using hh.Interfaces;
 using hh.Models;
+using hh.Services;
 using hh.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -131,11 +132,13 @@ namespace hh.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(User user)
         {
+            EmailService emailService = new EmailService();
             var u = CurrentUser().Result;
             u.UserName = user.UserName;
             u.Email = user.Email;
             u.PhoneNumber = user.PhoneNumber;
             _db.ContextUser.Update(u);
+            await emailService.SendEmailAsync($"{user.Email}", "Ваши данные были изменены", "Ваши обновленные данные" + $"{u.UserName}" + $"{ u.Email}" + $"{u.PhoneNumber}");
             await _db.SaveChangesAsync();
             return RedirectToAction("Profile");
         }
