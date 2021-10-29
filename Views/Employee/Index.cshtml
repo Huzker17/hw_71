@@ -32,7 +32,7 @@
             $('#' + id + ' .bot').append('<button class="bot" onclick=MyFunction(' + comments[i].id + ')>Откликнуться</button>')
         }
         }
-        let myFunction(id) {
+        function myFunction(id){
             $.post('@Url.Action("Feedback", "Employee")',
                 {
                     Id: id,

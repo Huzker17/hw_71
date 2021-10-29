@@ -1,4 +1,5 @@
 ﻿using hh.Models;
+using hh.Services;
 using hh.ViewModels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -19,6 +20,7 @@ namespace hh.Controllers
         private readonly SignInManager<User> _signInManager;
         IWebHostEnvironment _appEnvironment;
 
+
         public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, IWebHostEnvironment appEnvironment, ApplicationDbContext db)
         {
             _userManager = userManager;
@@ -34,6 +36,8 @@ namespace hh.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model, IFormFile uploadedFile)
         {
+            EmailService emailService = new EmailService();
+
             if (ModelState.IsValid)
             {
                 User user = new User
@@ -65,6 +69,7 @@ namespace hh.Controllers
                     if (model.IsCompany) 
                     { await _userManager.AddToRoleAsync(user, "company"); }
                     else { await _userManager.AddToRoleAsync(user, "user"); }
+                    await emailService.SendEmailAsync($"{user.Email}", $"{user.UserName}", "https://localhost:44326/User/YourProfile?name=" +$"{user.UserName}");
                     await _signInManager.SignInAsync(user, false);
                     return RedirectToAction("Index", "Home");
                 }

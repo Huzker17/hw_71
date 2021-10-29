@@ -1,0 +1,75 @@
+﻿@model User
+<div class="container">
+    <h3>Настройки</h3>
+    <ul class="list-inline">
+        <li><a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@Model.Id" data-toggle="modal" data-target="#myModal">Изменить</a></li>
+    </ul>
+    <table class="table">
+        <tbody>
+            <tr>
+                <td>Имя</td>
+                <td>@Model.UserName</td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td>@Model.Email</td>
+            </tr>
+            <tr>
+                <td>Номер телефона</td>
+                <td>@Model.PhoneNumber</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div>
+    @if (Model.Summaries != null)
+    {
+        foreach (var item in Model.Summaries)
+        {
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">@item.Name</h5>
+                    <h6 class="card-subtitle mb-2 text-muted" id="time">@item.UpdateTime</h6>
+                    <a class="card-link" asp-action="EditSummary" asp-controller="Summary" asp-route-Id="@item.Id">Edit</a>
+                    <a class="card-link" asp-action="Refresh" asp-controller="Summary" asp-route-Id="@item.Id">Refresh</a>
+                </div>
+            </div>
+        }
+    }
+</div>
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Modal Header</h4>
+            </div>
+            <div class="modal-body">
+                <form asp-action="Edit" asp-controller="User">
+                    <div>
+                        <label asp-for="UserName">Имя </label><br />
+                        <input asp-for="UserName" />
+                        <span asp-validation-for="UserName"></span>
+                    </div>
+                    <div>
+                        <label asp-for="Email"></label><br />
+                        <input asp-for="Email" />
+                        <span asp-validation-for="Email"></span>
+                    </div>
+                    <div>
+                        <label asp-for="PhoneNumber"></label><br />
+                        <input asp-for="PhoneNumber" />
+                        <span asp-validation-for="PhoneNumber"></span>
+                    </div>
+                    <input type="submit" value="Сохранить">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -24,6 +24,13 @@ namespace hh.Controllers
         {
             return await _userManager.GetUserAsync(HttpContext.User);
         }
+        public IActionResult YourProfile(string userName)
+        {
+            var user = _db.ContextUser.FirstOrDefault(x=>x.UserName == userName);
+            var sums = _db.Summaries.Where(x => x.UserId == user.Id).ToList();
+            user.Summaries = sums;
+            return View(user);
+        }
         public IActionResult Profile()
         {
             var user = CurrentUser().Result;
